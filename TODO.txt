@@ -1,0 +1,16 @@
+
+* Move Utils -> Hoos {{done}}
+** Add DB update hook {{done}}
+* Prefs {{done}}
+* Configuration {{done}}
+* i18n {{done}}
+
+* github
+* Tests
+** Refactor special
+*** Divide finish handling for flow steps
+*** Location from Special page
+
+* Error / page cleanups
+* Reorg directories?
+
