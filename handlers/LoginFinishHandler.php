@@ -32,21 +32,21 @@ wfDebugLog( "OAuthAuth", "Session: " . print_r( $_SESSION, true ) );
 
 		$exUser = OAuthExternalUser::newFromRemoteId( $identity->sub, $identity->username, wfGetDB( DB_MASTER ) ); #TODO: don't do this, do storage for realz
 
-#wfDebugLog( "OAuthAuth", __METHOD__ . " identity: " . print_r( $identity, true ) );
-#wfDebugLog( "OAuthAuth", __METHOD__ . " ExUser: " . print_r( $exUser, true ) );
+wfDebugLog( "OAuthAuth", __METHOD__ . " identity: " . print_r( $identity, true ) );
+wfDebugLog( "OAuthAuth", __METHOD__ . " ExUser: " . print_r( $exUser, true ) );
 
 		if ( $exUser->attached() ) {
 			$status = AuthenticationHandler::doLogin( $exUser, $request );
-#wfDebugLog( "OAuthAuth", "Status From doLogin: " . print_r( $status, true ) );
+wfDebugLog( "OAuthAuth", "Status From doLogin: " . print_r( $status, true ) );
 			$s = \Status::newGood( array( 'successfulLogin', $status->getValue() ) );
 			$s->merge( $status );
 		} else {
 			$status = AuthenticationHandler::doCreateAndLogin( $exUser, $request );
-#wfDebugLog( "OAuthAuth", "Status From doCreateAndLogin: " . print_r( $status, true ) );
+wfDebugLog( "OAuthAuth", "Status From doCreateAndLogin: " . print_r( $status, true ) );
 			$s = \Status::newGood( array( 'successfulCreation', $status->getValue() ) );
 			$s->merge( $status );
 		}
-#wfDebugLog( "OAuthAuth", __METHOD__ . " returning Status: " . print_r( $s, true ) );
+wfDebugLog( "OAuthAuth", __METHOD__ . " returning Status: " . print_r( $s, true ) );
 		return $s;
 	}
 

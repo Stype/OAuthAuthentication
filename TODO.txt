@@ -4,8 +4,11 @@
 * Prefs {{done}}
 * Configuration {{done}}
 * i18n {{done}}
+* github {{done}}
+* Usurpation {{done}}
 
-* github
+
+
 * Tests
 ** Refactor special
 *** Divide finish handling for flow steps

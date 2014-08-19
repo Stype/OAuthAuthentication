@@ -5,40 +5,47 @@ namespace MediaWiki\Extensions\OAuthAuthentication;
 class AuthenticationHandler {
 
 	public static function doCreateAndLogin( OAuthExternalUser $exUser ) {
-		global $wgAuth;
-
+		global $wgAuth, $wgOAuthAuthenticationAccountUsurpation;
+wfDebugLog( "OAuthAuth", __METHOD__ . " Running" );
 		wfDebugLog( "OAuthAuth", "Doing create for user " . $exUser->getName() );
 		$u = \User::newFromName( $exUser->getName(), 'creatable' );
-
+wfDebugLog( "OAuthAuth", __METHOD__ . " User is: " . print_r( $u, true ) );
 		if ( !is_object( $u ) ) {
+wfDebugLog( "OAuthAuth", __METHOD__ . ": Bad User" );
 			return Status::newFatal( 'oauthauth-create-noname' );
-		} elseif ( 0 != $u->idForName() ) {
-			return \Status::newFatal( 'oauthauth-create-userexists' );
+		} elseif ( 0 !== $u->idForName() ) {
+wfDebugLog( "OAuthAuth", __METHOD__ . ": User exists and no usurpation" );
+			if ( !$wgOAuthAuthenticationAccountUsurpation ) {
+				return \Status::newFatal( 'oauthauth-create-userexists' );
+			}
+			$exUser->setLocalId( $u->idForName() );
+		} else {
+wfDebugLog( "OAuthAuth", __METHOD__ . ": Creating user" );
+			# TODO: Does this need to call $wgAuth->addUser? This could potentially coexist
+			# with another auth plugin.
+
+			$status = $u->addToDatabase();
+			if ( !$status->isOK() ) {
+				return $status;
+			}
+
+			/* TODO: Set email, realname, and language, once we can get them via /identify
+			$u->setEmail( $exUser->getEmail() );
+			$u->setRealName( $exUser->getRealName() );
+			$u->setOption( 'language', $exUser->getLanguage() );
+			*/
+
+			$u->setToken();
+			\DeferredUpdates::addUpdate( new \SiteStatsUpdate( 0, 0, 0, 0, 1 ) );
+			$u->addWatch( $u->getUserPage(), \WatchedItem::IGNORE_USER_RIGHTS );
+			$u->saveSettings();
+
+			wfRunHooks( 'AddNewAccount', array( $u, false ) );
 		}
 
-		# TODO: Does this need to call $wgAuth->addUser? This could potentially coexist
-		# with another auth plugin.
+		$exUser->addToDatabase( wfGetDB( DB_MASTER ) ); //TODO: di
 
-		$status = $u->addToDatabase();
-		if ( !$status->isOK() ) {
-			return $status;
-		}
-
-		$exUser->addToDatabase();
-
-		/* TODO: Set email, realname, and language, once we can get them via /identify
-		$u->setEmail( $exUser->getEmail() );
-		$u->setRealName( $exUser->getRealName() );
-		$u->setOption( 'language', $exUser->getLanguage() );
-		*/
-
-		$u->setToken();
-		\DeferredUpdates::addUpdate( new \SiteStatsUpdate( 0, 0, 0, 0, 1 ) );
-		$u->addWatch( $u->getUserPage(), \WatchedItem::IGNORE_USER_RIGHTS );
-
-		$u->saveSettings();
 		$u->setCookies();
-		wfRunHooks( 'AddNewAccount', array( $u, false ) );
 		$u->addNewUserLogEntry( 'create' );
 
 		return \Status::newGood( $u );

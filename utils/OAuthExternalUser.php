@@ -28,13 +28,13 @@ class OAuthExternalUser {
 		);
 
 		if ( !$row ) {
-			return new self( 0, 0, $username );
+			return new self( $rid, 0, $username );
 		} else {
 			return new self( $rid, $row->oaau_uid, $row->oaau_username );
 		}
 	}
 
-	public static function addToDatabase( \DatabaseBase $db ) {
+	public function addToDatabase( \DatabaseBase $db ) {
 		$db->insert(
 			'oauthauth_user',
 			array(
@@ -52,6 +52,10 @@ class OAuthExternalUser {
 
 	public function getLocalId() {
 		return $this->userId;
+	}
+
+	public function setLocalId( $uid ) {
+		$this->userId = $uid;
 	}
 
 	public function attached() {

@@ -12,16 +12,14 @@ class PhpSessionStore extends SessionStore {
 	}
 
 	public function get( $key ) {
-		#return $_SESSION[$key];
 		return $this->request->getSessionData( $key );
 	}
 
 	public function set( $key, $value ) {
-		#$_SESSION[$key] = $value;
 		$this->request->setSessionData( $key, $value );
 	}
 
 	public function delete( $key ) {
-		#unset( $_SESSION[$key] );
+		$this->request->setSessionData( $key, null );
 	}
 }

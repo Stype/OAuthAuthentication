@@ -39,6 +39,13 @@ $wgOAuthAuthenticationConsumerSecret = null;
  */
 $wgOAuthAuthenticationCanonicalUrl = null;
 
+/**
+ * Allow usurpation of accounts. If accounts on the OAuth provider have the same
+ * name as an already created local account, this flag decides if the user is allowed
+ * to login, or if the login will fail with an error message.
+ */
+$wgOAuthAuthenticationAccountUsurpation = false;
+
 $dir = __DIR__;
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\SpecialOAuthLogin'] = "$dir/specials/SpecialOAuthLogin.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\Config'] = "$dir/utils/Config.php";
