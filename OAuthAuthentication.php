@@ -46,11 +46,24 @@ $wgOAuthAuthenticationCanonicalUrl = null;
  */
 $wgOAuthAuthenticationAccountUsurpation = false;
 
+/**
+ * Only allow creation/login of usernames that are on a whitelist. Setting this to
+ * false allows any username to register and login.
+ */
+$wgOAuthAuthenticationUsernameWhitelist = false;
+
+/**
+ * Only allow creation/login of users who are in groups on the remote wiki. Setting
+ * this to false allows any username to register and login.
+ */
+$wgOAuthAuthenticationGroupWhitelist = false;
+
 $dir = __DIR__;
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\SpecialOAuthLogin'] = "$dir/specials/SpecialOAuthLogin.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\Config'] = "$dir/utils/Config.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\Exception'] = "$dir/utils/Exception.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\Hooks'] = "$dir/utils/Hooks.php";
+$wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\Policy'] = "$dir/utils/Policy.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\OAuthExternalUser'] = "$dir/utils/OAuthExternalUser.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\OAuthLoginHandler'] = "$dir/handlers/OAuthLoginHandler.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\LoginFinishHandler'] = "$dir/handlers/LoginFinishHandler.php";
@@ -60,7 +73,7 @@ $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\SessionStore'] = "$
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\PhpSessionStore'] = "$dir/store/PhpSessionStore.php";
 
 ## i18n
-$messagesDirs['OAuthAuthentication'] = "$dir/i18n";
+$wgMessagesDirs['OAuthAuthentication'] = "$dir/i18n";
 #$messagesFiles['OAuthAuthentication'] = "$langDir/OAuthAuthentication.alias.php";
 
 

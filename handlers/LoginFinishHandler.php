@@ -30,6 +30,10 @@ wfDebugLog( "OAuthAuth", "Session: " . print_r( $_SESSION, true ) );
 		// Get Identity
 		$identity = $client->identify( $accessToken );
 
+		if ( !Policy::checkWhitelists( $identity ) ) {
+			return \Status::newFatal( 'oauthauth-nologin-policy' );
+		}
+
 		$exUser = OAuthExternalUser::newFromRemoteId( $identity->sub, $identity->username, wfGetDB( DB_MASTER ) ); #TODO: don't do this, do storage for realz
 
 wfDebugLog( "OAuthAuth", __METHOD__ . " identity: " . print_r( $identity, true ) );

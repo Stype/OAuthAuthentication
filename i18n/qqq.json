@@ -4,7 +4,7 @@
 			"CSteipp"
 		]
 	},
-		"oauthauth-already-logged-in": "You are already logged in. $1 to continue",
+	"oauthauth-already-logged-in": "You are already logged in. $1 to continue",
 	"oauthauth-error": "Title for OAuth login page errors",
 	"ouathauth-logout": "Link text for logout link",
 	"oauthauth-failed-handshake": "Error message to users when an unknown issue occured.",
@@ -12,5 +12,6 @@
 	"oauthauth-create-noname": "Error when the username on the OAuth-server wiki isn't valid on this client wiki.",
 	"oauthauth-create-userexists": "Error when the login account is already created on the client wiki, preventing the user from logging in.",
 	"oauthauth-login-noname": "Error when the username on the OAuth-server wiki isn't valid on this client wiki.",
-	"oauthauth-login-usernotexists": "Error when the user logs in with an account that was attached on this wiki, but no longer exists."
+	"oauthauth-login-usernotexists": "Error when the user logs in with an account that was attached on this wiki, but no longer exists.",
+	"oauthauth-nologin-policy": "Error the user sees hwne the local wiki's administrator has prevented their login with a policy."
 }

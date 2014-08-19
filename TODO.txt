@@ -6,6 +6,7 @@
 * i18n {{done}}
 * github {{done}}
 * Usurpation {{done}}
+* Whitelists {{done}}
 
 
 
