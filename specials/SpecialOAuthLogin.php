@@ -13,9 +13,8 @@ class SpecialOAuthLogin extends \UnlistedSpecialPage {
 		global $wgUser;
 		$request = $this->getRequest();
 
-wfDebugLog( "OAuthAuth", __METHOD__ . "Special: '$subpage'" );
 		$this->setHeaders();
-wfDebugLog( "OAuthAuth", __METHOD__ . "2" );
+
 		if ( !$this->getUser()->isAnon() ) {
 			throw new \ErrorPageError( 'oauthauth-error', 'oauthauth-already-logged-in' );
 		}
@@ -43,7 +42,6 @@ wfDebugLog( "OAuthAuth", __METHOD__ . "2" );
 			default:
 				throw new \ErrorPageError( 'oauthauth-error', 'oauthauth-invalid-subpage' );
 		}
-wfDebugLog( "OAuthAuth", "Handler is " . get_class( $handler ) );
 
 		if ( $handler ) {
 			list( $config, $cmrToken ) = Config::getDefaultConfigAndToken();
@@ -63,7 +61,6 @@ wfDebugLog( "OAuthAuth", "Handler is " . get_class( $handler ) );
 			$this->getContext()->setUser( $u );
 			$wgUser = $u;
 
-wfDebugLog( "OAuthAuth", "LoginForm finisher is $method" );
 			$lp = new \LoginForm();
 
 			// Call LoginForm::successfulCreation() on create, or successfulLogin()

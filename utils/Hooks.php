@@ -19,7 +19,6 @@ class Hooks {
 	}
 
 	public static function onPostLoginRedirect( &$returnTo, &$returnToQuery, &$type ) {
-wfDebugLog( 'OAUTHAUTH', " here" );
 		global $wgRequest;
 		$session = new PhpSessionStore( $wgRequest );
 
@@ -48,7 +47,7 @@ wfDebugLog( 'OAUTHAUTH', " here" );
 			array(),
 			array( 'returnto' => \SpecialPage::getTitleFor( 'Preferences' ) )
 		);
-wfDebugLog( "PrefsHook", print_r( $preferences, true ) );
+
 		if ( empty( $user->mPassword ) && empty( $user->mNewpassword ) ) {
 
 			if ( $user->isEmailConfirmed() ) {
