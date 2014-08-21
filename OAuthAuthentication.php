@@ -75,6 +75,8 @@ $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\PhpSessionStore'] =
 ## i18n
 $wgMessagesDirs['OAuthAuthentication'] = "$dir/i18n";
 #$messagesFiles['OAuthAuthentication'] = "$langDir/OAuthAuthentication.alias.php";
+$wgExtensionMessagesFiles['SpecialOAuthLoginNoTranslate'] = "$dir/OAuthAuthentication.notranslate-alias.php";
+
 
 
 ## Use mwoauth-php. Cool Kids can use composer to do this.

@@ -4,7 +4,6 @@ namespace MediaWiki\Extensions\OAuthAuthentication;
 
 class Policy {
 
-
 	/**
 	 * @param $identity jwt identity object
 	 * @return bool true if the user should be allowed according to whitelists. False otherwise.

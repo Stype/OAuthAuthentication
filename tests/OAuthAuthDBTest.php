@@ -16,6 +16,14 @@ class OAuthAuthDBTest extends MediaWikiTestCase {
 		$this->db->sourceFile( __DIR__ . '/../store/oauthauth.sql' );
 
 		// TODO: Setup some test data
+		$user = User::newFromName( 'OAuthUser' );
+		if ( $user->idForName() == 0 ) {
+			$user->addToDatabase();
+			$user->setPassword( 'OAUP@ssword' );
+			$user->saveSettings();
+		}
+		$exUser = new \MediaWiki\Extensions\OAuthAuthentication\OAuthExternalUser( 100, $user->getId(), 'OAuthUser' );
+		$exUser->addToDatabase( $this->db );
 	}
 
 	protected function tearDown() {
