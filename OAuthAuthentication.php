@@ -65,10 +65,8 @@ $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\Exception'] = "$dir
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\Hooks'] = "$dir/utils/Hooks.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\Policy'] = "$dir/utils/Policy.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\OAuthExternalUser'] = "$dir/utils/OAuthExternalUser.php";
-$wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\OAuthLoginHandler'] = "$dir/handlers/OAuthLoginHandler.php";
-$wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\LoginFinishHandler'] = "$dir/handlers/LoginFinishHandler.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\AuthenticationHandler'] = "$dir/handlers/AuthenticationHandler.php";
-$wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\LoginInitHandler'] = "$dir/handlers/LoginInitHandler.php";
+$wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\OAuth1Handler'] = "$dir/handlers/OAuth1Handler.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\SessionStore'] = "$dir/store/SessionStore.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\PhpSessionStore'] = "$dir/store/PhpSessionStore.php";
 

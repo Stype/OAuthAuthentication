@@ -7,7 +7,7 @@ class AuthenticationHandler {
 	public static function doCreateAndLogin( OAuthExternalUser $exUser ) {
 		global $wgAuth, $wgOAuthAuthenticationAccountUsurpation;
 		wfDebugLog( "OAuthAuth", "Doing create & login for user " . $exUser->getName() );
-wfDebugLog( "OAuthAuth", print_r( $exUser, true ) );
+
 		$u = \User::newFromName( $exUser->getName(), 'creatable' );
 
 		if ( !is_object( $u ) ) {

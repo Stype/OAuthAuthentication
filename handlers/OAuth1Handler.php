@@ -2,9 +2,22 @@
 
 namespace MediaWiki\Extensions\OAuthAuthentication;
 
-class LoginFinishHandler implements OAuthLoginHandler {
+class OAuth1Handler {
 
-	public function process( \WebRequest $request, SessionStore $session, $client ) {
+
+	public function init( SessionStore $session, $client ) {
+		// Step 1 - Get a request token
+		list( $redir, $requestToken ) = $client->initiate();
+		$session->set( 'oauthreqtoken', "{$requestToken->key}:{$requestToken->secret}" );
+		return $redir;
+	}
+
+	public function doRedir( \WebResponse $response, $url ) {
+		$response->header( "Location: $url", true );
+	}
+
+
+	public function finish( \WebRequest $request, SessionStore $session, $client ) {
 		$verifyCode = $request->getVal( 'oauth_verifier', false );
 		$recKey = $request->getVal( 'oauth_token', false );
 
