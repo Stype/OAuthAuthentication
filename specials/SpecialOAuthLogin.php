@@ -45,7 +45,7 @@ class SpecialOAuthLogin extends \UnlistedSpecialPage {
 						$client
 					);
 
-					$handler->doRedir( $this->getRequest()->response(), $redir );
+					$handler->authorize( $this->getRequest()->response(), $redir );
 
 				} catch ( Exception $e ) {
 					throw new \ErrorPageError( 'oauthauth-error', $e->getMessage() );
@@ -56,19 +56,28 @@ class SpecialOAuthLogin extends \UnlistedSpecialPage {
 
 				break;
 			case 'finish':
-				#$handler = new LoginFinishHandler();
 				try {
-					$status = $handler->finish(
+					$identity = $handler->finish(
 						$this->getRequest(),
 						$session,
 						$client
 					);
+
+					if ( !Policy::checkWhitelists( $identity ) ) {
+						throw new \ErrorPageError( 'oauthauth-error', 'oauthauth-nologin-policy' );
+					}
+
+					$status = $handler->userlogin( $this->getRequest(), $identity );
+
+					if ( !$status->isGood() ) {
+						throw new \ErrorPageError( 'oauthauth-error', $status->getMessage() );
+					}
+				} catch ( \ErrorPageError $epe ) {
+					throw $epe;
 				} catch ( Exception $e ) {
 					throw new \ErrorPageError( 'oauthauth-error', $e->getMessage() );
 				}
-				if ( !$status->isGood() ) {
-					throw new \ErrorPageError( 'oauthauth-error', $status->getMessage() );
-				}
+
 				list( $method, $u ) = $status->getValue();
 
 				$this->getContext()->setUser( $u );

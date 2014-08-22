@@ -12,7 +12,7 @@ class OAuth1Handler {
 		return $redir;
 	}
 
-	public function doRedir( \WebResponse $response, $url ) {
+	public function authorize( \WebResponse $response, $url ) {
 		$response->header( "Location: $url", true );
 	}
 
@@ -41,9 +41,10 @@ class OAuth1Handler {
 		// Get Identity
 		$identity = $client->identify( $accessToken );
 
-		if ( !Policy::checkWhitelists( $identity ) ) {
-			return \Status::newFatal( 'oauthauth-nologin-policy' );
-		}
+		return $identity;
+	}
+
+	public function userlogin( \WebRequest $request, $identity ) {
 
 		$exUser = OAuthExternalUser::newFromRemoteId(
 			$identity->sub,
@@ -64,5 +65,6 @@ class OAuth1Handler {
 		wfDebugLog( "OAuthAuth", __METHOD__ . " returning Status: " . (int) $s->isGood() );
 		return $s;
 	}
+
 
 }
