@@ -4,6 +4,30 @@ namespace MediaWiki\Extensions\OAuthAuthentication;
 
 class AuthenticationHandler {
 
+
+	public static function handleIdentity( \WebRequest $request, $identity, \OAuthToken $accessToken ) {
+		$exUser = OAuthExternalUser::newFromRemoteId(
+			$identity->sub,
+			$identity->username,
+			wfGetDB( DB_MASTER )  #TODO: don't do this
+		);
+		$exUser->setAccessToken( $accessToken );
+		$exUser->setIdentifyTS( new \MWTimestamp() );
+
+		if ( $exUser->attached() ) {
+			$status = AuthenticationHandler::doLogin( $exUser, $request );
+			$s = \Status::newGood( array( 'successfulLogin', $status->getValue() ) );
+			$s->merge( $status );
+		} else {
+			$status = AuthenticationHandler::doCreateAndLogin( $exUser, $request );
+			$s = \Status::newGood( array( 'successfulCreation', $status->getValue() ) );
+			$s->merge( $status );
+		}
+
+		wfDebugLog( "OAuthAuth", __METHOD__ . " returning Status: " . (int) $s->isGood() );
+		return $s;
+	}
+
 	public static function doCreateAndLogin( OAuthExternalUser $exUser ) {
 		global $wgAuth, $wgOAuthAuthenticationAccountUsurpation;
 		wfDebugLog( "OAuthAuth", "Doing create & login for user " . $exUser->getName() );
@@ -76,6 +100,8 @@ class AuthenticationHandler {
 				__METHOD__ . ": Associated user is Anon. Aborting." );
 			return \Status::newFatal( 'oauthauth-login-usernotexists' );
 		}
+wfDebugLog( "OAA", __METHOD__ . " updating exuser: " . print_r( $exUser, true ) );
+		$exUser->updateInDatabase( wfGetDB( DB_MASTER ) );
 
 		$u->invalidateCache();
 

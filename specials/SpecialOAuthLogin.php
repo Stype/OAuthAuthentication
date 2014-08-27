@@ -57,9 +57,14 @@ class SpecialOAuthLogin extends \UnlistedSpecialPage {
 				break;
 			case 'finish':
 				try {
-					$identity = $handler->finish(
+					$accessToken = $handler->finish(
 						$this->getRequest(),
 						$session,
+						$client
+					);
+
+					$identity = $handler->identify(
+						$accessToken,
 						$client
 					);
 
@@ -67,7 +72,11 @@ class SpecialOAuthLogin extends \UnlistedSpecialPage {
 						throw new \ErrorPageError( 'oauthauth-error', 'oauthauth-nologin-policy' );
 					}
 
-					$status = $handler->userlogin( $this->getRequest(), $identity );
+					$status = AuthenticationHandler::handleIdentity(
+						$this->getRequest(),
+						$identity,
+						$accessToken
+					);
 
 					if ( !$status->isGood() ) {
 						throw new \ErrorPageError( 'oauthauth-error', $status->getMessage() );

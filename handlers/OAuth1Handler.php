@@ -38,32 +38,15 @@ class OAuth1Handler {
 		// Step 3 - Get access token
 		$accessToken = $client->complete( $requestToken,  $verifyCode );
 
+		return $accessToken;
+	}
+
+
+	public function identify( \OAuthToken $accessToken, $client ) {
 		// Get Identity
 		$identity = $client->identify( $accessToken );
 
 		return $identity;
-	}
-
-	public function userlogin( \WebRequest $request, $identity ) {
-
-		$exUser = OAuthExternalUser::newFromRemoteId(
-			$identity->sub,
-			$identity->username,
-			wfGetDB( DB_MASTER )  #TODO: don't do this
-		);
-
-		if ( $exUser->attached() ) {
-			$status = AuthenticationHandler::doLogin( $exUser, $request );
-			$s = \Status::newGood( array( 'successfulLogin', $status->getValue() ) );
-			$s->merge( $status );
-		} else {
-			$status = AuthenticationHandler::doCreateAndLogin( $exUser, $request );
-			$s = \Status::newGood( array( 'successfulCreation', $status->getValue() ) );
-			$s->merge( $status );
-		}
-
-		wfDebugLog( "OAuthAuth", __METHOD__ . " returning Status: " . (int) $s->isGood() );
-		return $s;
 	}
 
 
