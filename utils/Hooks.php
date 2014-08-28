@@ -4,7 +4,9 @@ namespace MediaWiki\Extensions\OAuthAuthentication;
 class Hooks {
 
 	public static function onPersonalUrls( &$personal_urls, &$title ) {
-		global $wgUser, $wgRequest;
+		global $wgUser, $wgRequest,
+			$wgOAuthAuthenticationAllowLocalUsers, $wgOAuthAuthenticationRemoteName;
+
 		if ( $wgUser->getID() == 0 ) {
 			$query = array();
 			$query['returnto'] = $title->getPrefixedText();
@@ -14,6 +16,14 @@ class Hooks {
 			unset( $returntoquery['returntoquery'] );
 			$query['returntoquery'] = wfArrayToCgi( $returntoquery );
 			$personal_urls['login']['href'] = \SpecialPage::getTitleFor( 'OAuthLogin', 'init' )->getFullURL( $query );
+			if ( $wgOAuthAuthenticationRemoteName ) {
+				$personal_urls['login']['text'] = wfMessage( 'oauthauth-login',
+					$wgOAuthAuthenticationRemoteName )->text();
+			}
+
+			if ( $wgOAuthAuthenticationAllowLocalUsers === false ) {
+				unset( $personal_urls['createaccount'] );
+			}
 		}
 		return true;
 	}
@@ -81,6 +91,31 @@ class Hooks {
 				'default' => $resetlink,
 				'label-message' => null,
 			);
+		}
+	}
+
+	/**
+	 * @param $user User
+	 * @param $abortError
+	 * @return bool
+	 */
+	static function onAbortNewAccount( $user, &$abortError ) {
+		global $wgOAuthAuthenticationAllowLocalUsers, $wgRequest;
+
+		if ( $wgOAuthAuthenticationAllowLocalUsers === false ) {
+			$query = array();
+			$query['returnto'] = $wgRequest->getVal( 'returnto' );
+			$query['returntoquery'] = $wgRequest->getVal( 'returntoquery' );
+			$loginTitle = \SpecialPage::getTitleFor( 'OAuthLogin', 'init' );
+			$loginlink = \Linker::Link(
+				$loginTitle,
+				wfMessage( 'login' )->escaped(),
+				array(),
+				$query
+			);
+			$msg = wfMessage( 'oauthauth-localuser-not-allowed' )->rawParams( $loginlink );
+			$abortError = $msg->escaped();
+			return false;
 		}
 	}
 

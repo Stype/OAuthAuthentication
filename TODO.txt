@@ -8,6 +8,8 @@
 * Usurpation {{done}}
 * Whitelists {{done}}
 * Debugs {{done}}
+* Config flag to disallow local creates {{done}}
+** remove create account link in toolbar {{done}}
 
 * Tests
 ** Refactor special
@@ -16,7 +18,7 @@
 
 * max session without revalidation when whitelisted
 
-* Config flag to disallow local creates
+
 
 * Reorg directories?
 

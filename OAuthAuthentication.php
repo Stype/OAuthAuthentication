@@ -58,6 +58,21 @@ $wgOAuthAuthenticationUsernameWhitelist = false;
  */
 $wgOAuthAuthenticationGroupWhitelist = false;
 
+/**
+ * Allow local account creation. Set this to false if you only want
+ * to use remote accounts.
+ * Note: Once local accounts exist, this extension will not prevent
+ * them from logging in.
+ */
+$wgOAuthAuthenticationAllowLocalUsers = true;
+
+/**
+ * A simple text string, naming the remote wiki (used for text like, "Login on <wikiname>". If
+ * this is false, a generic "Remote OAuth Wiki" is used, which users may not understand.
+ */
+$wgOAuthAuthenticationRemoteName = false;
+
+
 $dir = __DIR__;
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\SpecialOAuthLogin'] = "$dir/specials/SpecialOAuthLogin.php";
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\Config'] = "$dir/utils/Config.php";
@@ -89,6 +104,7 @@ $wgHooks['PersonalUrls'][] = 'MediaWiki\Extensions\OAuthAuthentication\Hooks::on
 $wgHooks['PostLoginRedirect'][] = 'MediaWiki\Extensions\OAuthAuthentication\Hooks::onPostLoginRedirect';
 $wgHooks['LoadExtensionSchemaUpdates'][] = 'MediaWiki\Extensions\OAuthAuthentication\Hooks::onLoadExtensionSchemaUpdates';
 $wgHooks['GetPreferences'][] = 'MediaWiki\Extensions\OAuthAuthentication\Hooks::onGetPreferences';
+$wgHooks['AbortNewAccount'][] = 'MediaWiki\Extensions\OAuthAuthentication\Hooks::onAbortNewAccount';
 
 $wgHooks['UnitTestsList'][] = function( array &$files ) {
 	$directoryIterator = new \RecursiveDirectoryIterator( __DIR__ . '/tests/' );
