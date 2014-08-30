@@ -95,6 +95,40 @@ class Hooks {
 	}
 
 	/**
+	 * Check that the identity complies with the site policy
+	 *
+	 */
+	public static function onUserLoadAfterLoadFromSession( $user ) {
+		global $wgOAuthAuthenticationMaxIdentityAge;
+
+		if ( Policy::policyToEnforce() ) {
+			if ( !isset( $user->extAuthObj ) ) {
+				$user->extAuthObj = OAuthExternalUser::newFromUser( $user, wfGetDB( DB_MASTER ) );
+			}
+
+			if ( $user->extAuthObj ) {
+				$lastVerify = new \MWTimestamp( $user->extAuthObj->getIdentifyTS() );
+				$minVerify = new \MWTimestamp( time() - $wgOAuthAuthenticationMaxIdentityAge );
+
+				if ( $lastVerify->getTimestamp() <= $minVerify->getTimestamp() ) {
+					list( $config, $cmrToken ) = Config::getDefaultConfigAndToken();
+					$client = new \MWOAuthClient( $config, $cmrToken );
+					$handler = new OAuth1Handler();
+					$identity = $handler->identify( $user->extAuthObj->getAccessToken(), $client );
+					$user->extAuthObj->setIdentifyTS( new \MWTimestamp() );
+					$user->extAuthObj->updateInDatabase( wfGetDB( DB_MASTER ) );
+					if ( !Policy::checkWhitelists( $identity ) ) {
+						$user->logout();
+						throw new \ErrorPageError( 'oauthauth-error', 'oauthauth-loggout-policy' );
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * @param $user User
 	 * @param $abortError
 	 * @return bool

@@ -15,5 +15,6 @@
 	"oauthauth-login": "Text for link to login on remote wiki.\n\nParameters:\n* $1 - the name of the remote wiki where the user will log in.",
 	"oauthauth-login-usernotexists": "Error when the user logs in with an account that was attached on this wiki, but no longer exists.",
 	"oauthauth-nologin-policy": "Error the user sees hwne the local wiki's administrator has prevented their login with a policy.",
-	"oauthauth-localuser-not-allowed": "Error when the user attempts to create an account, but the wiki isn't configured to allow it, and instructing the user to login via OAuth.\n\nParameters:\n* $1 - link text {{msg-mw|login}}. A link to login."
+	"oauthauth-localuser-not-allowed": "Error when the user attempts to create an account, but the wiki isn't configured to allow it, and instructing the user to login via OAuth.\n\nParameters:\n* $1 - link text {{msg-mw|login}}. A link to login.",
+	"oauthauth-loggout-policy": "Error message when a user is logged out because their user no longer complies with the requirements set by the site administrator"
 }

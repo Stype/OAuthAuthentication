@@ -61,7 +61,7 @@ class OAuthExternalUser {
 		if ( !$row ) {
 			return false;
 		} else {
-			return new self( $rid, $row->oaau_uid, $row->oaau_username,
+			return new self( $row->oaau_rid, $row->oaau_uid, $row->oaau_username,
 				$row->oaau_access_token, $row->oaau_access_secret,
 				$row->oaau_identify_timestamp );
 		}
@@ -160,8 +160,15 @@ class OAuthExternalUser {
 		$this->accessToken = $accessToken;
 	}
 
+	public function getAccessToken() {
+		return $this->accessToken;
+	}
+
 	public function setIdentifyTS( \MWTimestamp $ts ) {
 		$this->identifyTS = $ts;
 	}
 
+	public function getIdentifyTS() {
+		return $this->identifyTS;
+	}
 }

@@ -72,6 +72,11 @@ $wgOAuthAuthenticationAllowLocalUsers = true;
  */
 $wgOAuthAuthenticationRemoteName = false;
 
+/**
+ * Max age that a session can go without re-validating the user's identity.
+ */
+$wgOAuthAuthenticationMaxIdentityAge = 3600;
+
 
 $dir = __DIR__;
 $wgAutoloadClasses['MediaWiki\Extensions\OAuthAuthentication\SpecialOAuthLogin'] = "$dir/specials/SpecialOAuthLogin.php";
@@ -95,7 +100,7 @@ $wgExtensionMessagesFiles['SpecialOAuthLoginNoTranslate'] = "$dir/OAuthAuthentic
 ## Use mwoauth-php. Cool Kids can use composer to do this.
 $wgAutoloadClasses['MWOAuthClientConfig'] = "$dir/libs/mwoauth-php/MWOAuthClient.php";
 $wgAutoloadClasses['MWOAuthClient'] = "$dir/libs/mwoauth-php/MWOAuthClient.php";
-
+$wgAutoloadClasses['OAuthToken'] = "$dir/libs/mwoauth-php/OAuth.php";
 
 
 $wgSpecialPages['OAuthLogin'] = 'MediaWiki\Extensions\OAuthAuthentication\SpecialOAuthLogin';
@@ -105,6 +110,7 @@ $wgHooks['PostLoginRedirect'][] = 'MediaWiki\Extensions\OAuthAuthentication\Hook
 $wgHooks['LoadExtensionSchemaUpdates'][] = 'MediaWiki\Extensions\OAuthAuthentication\Hooks::onLoadExtensionSchemaUpdates';
 $wgHooks['GetPreferences'][] = 'MediaWiki\Extensions\OAuthAuthentication\Hooks::onGetPreferences';
 $wgHooks['AbortNewAccount'][] = 'MediaWiki\Extensions\OAuthAuthentication\Hooks::onAbortNewAccount';
+$wgHooks['UserLoadAfterLoadFromSession'][] = 'MediaWiki\Extensions\OAuthAuthentication\Hooks::onUserLoadAfterLoadFromSession';
 
 $wgHooks['UnitTestsList'][] = function( array &$files ) {
 	$directoryIterator = new \RecursiveDirectoryIterator( __DIR__ . '/tests/' );

@@ -4,6 +4,15 @@ namespace MediaWiki\Extensions\OAuthAuthentication;
 
 class Policy {
 
+	public static function policyToEnforce() {
+		global $wgOAuthAuthenticationUsernameWhitelist,
+			$wgOAuthAuthenticationGroupWhitelist;
+
+		return ( $wgOAuthAuthenticationUsernameWhitelist !== false
+			|| $wgOAuthAuthenticationGroupWhitelist !== false
+		);
+	}
+
 	/**
 	 * @param $identity jwt identity object
 	 * @return bool true if the user should be allowed according to whitelists. False otherwise.
